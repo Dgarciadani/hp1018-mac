@@ -1,0 +1,18 @@
+# Build output (also holds the downloaded HP firmware)
+build/
+
+# HP firmware and plugins: proprietary, must never be committed
+*.dl
+*.fw
+*.fw.gz
+*.img
+*.run
+*.cab
+
+# Generated print data and test images
+*.zjs
+*.ras
+*.pbm
+*.pgm
+
+.DS_Store

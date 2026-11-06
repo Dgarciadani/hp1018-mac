@@ -26,17 +26,36 @@ Windows no lo descargue solo. Esta guía cubre los dos caminos y un plan B.
 ## Opción 2: Microsoft Update Catalog + script
 
 1. Abre <https://www.catalog.update.microsoft.com> y busca `HP LaserJet 1018`.
-2. Descarga la versión para Windows 10 (x64 o x86, según tu equipo). Es un `.cab`.
-3. Copia `install-hp1018.ps1` al PC, abre **PowerShell como Administrador** y ejecuta:
+2. Elige la entrada **"Hewlett-Packard - Printers - HP LaserJet 1018"** del **17/9/2012**
+   (4,4 MB), que dice *"Windows 8.1 and later drivers"*. **"and later" incluye Windows 10 y 11**:
+   no existe una entrada que diga "Windows 10". Un mismo `.cab` trae las versiones de 32 y
+   64 bits. Pulsa **Download** y luego el enlace `.cab` que aparece (tendrá un nombre largo,
+   como `20522205_dd3e17….cab`).
+3. Descarga este proyecto en el PC (**Code → Download ZIP** en GitHub) y descomprímelo.
+   El script está en la carpeta `windows`.
+4. Abre **PowerShell como Administrador** (menú Inicio → escribe *PowerShell* → clic derecho →
+   *Ejecutar como administrador*), entra a la carpeta `windows` y ejecuta **una sola línea**:
 
    ```powershell
-   Set-ExecutionPolicy -Scope Process Bypass
-   .\install-hp1018.ps1 -DriverPath "$env:USERPROFILE\Downloads\<archivo>.cab"
+   powershell -ExecutionPolicy Bypass -File .\install-hp1018.ps1 -DriverPath "C:\Users\TU_USUARIO\Downloads\NOMBRE_DEL.cab"
    ```
 
-   El script descomprime el `.cab`, instala el `.inf` con `pnputil`, crea la
-   impresora en el puerto USB e imprime una página de prueba. Si el driver ya
-   venía de Windows Update, basta con `.\install-hp1018.ps1`.
+   Cambia la ruta por la de tu `.cab` (puedes arrastrar el archivo a la ventana de PowerShell
+   para que escriba la ruta). Esta forma permite ejecutar el script solo esta vez, sin cambiar
+   la configuración de seguridad de Windows.
+
+   El script descomprime el `.cab`, instala el driver con `pnputil`, crea la impresora en el
+   puerto USB e imprime una página de prueba. Si el driver ya venía de Windows Update, quita
+   la parte `-DriverPath "..."`.
+
+### Alternativa sin script
+
+1. Abre el `.cab` con doble clic (Windows lo muestra como una carpeta), selecciona todo y
+   cópialo a una carpeta nueva, por ejemplo `C:\HP1018`.
+2. **Panel de control → Dispositivos e impresoras → Agregar una impresora → "La impresora
+   que deseo no está en la lista" → Agregar una impresora local → puerto `USB001`**.
+3. Pulsa **Usar disco… → Examinar**, elige `C:\HP1018\HPLJ1020.INF` (sirve para la 1018,
+   1020 y 1022) y luego el modelo **HP LaserJet 1018**.
 
 ## Problemas frecuentes
 

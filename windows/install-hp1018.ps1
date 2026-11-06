@@ -15,9 +15,11 @@
   Ejecutar en PowerShell como Administrador, con la impresora conectada
   por USB y encendida:
 
-    Set-ExecutionPolicy -Scope Process Bypass
-    .\install-hp1018.ps1
-    .\install-hp1018.ps1 -DriverPath "$env:USERPROFILE\Downloads\driver.cab"
+    powershell -ExecutionPolicy Bypass -File .\install-hp1018.ps1
+    powershell -ExecutionPolicy Bypass -File .\install-hp1018.ps1 -DriverPath "C:\ruta\al\archivo.cab"
+
+  En el catalogo, el paquete correcto es "Hewlett-Packard - Printers - HP LaserJet 1018"
+  del 17/9/2012, "Windows 8.1 and later drivers" (sirve para Windows 10 y 11).
 
 .PARAMETER DriverPath
   Archivo .cab o carpeta con el driver del Microsoft Update Catalog.
@@ -58,8 +60,9 @@ if (-not $driver) {
         Write-Host "El driver no esta instalado. Descargalo asi:"
         Write-Host "  1. Abre https://www.catalog.update.microsoft.com"
         Write-Host "  2. Busca: HP LaserJet 1018"
-        Write-Host "  3. Descarga la version para Windows 10 x64 (archivo .cab)"
-        Write-Host "  4. Ejecuta: .\install-hp1018.ps1 -DriverPath <ruta al .cab>"
+        Write-Host "  3. Descarga 'Hewlett-Packard - Printers - HP LaserJet 1018' del 17/9/2012"
+        Write-Host "     ('Windows 8.1 and later drivers': sirve para Windows 10 y 11)"
+        Write-Host "  4. Ejecuta: powershell -ExecutionPolicy Bypass -File .\install-hp1018.ps1 -DriverPath <ruta al .cab>"
         exit 1
     }
 

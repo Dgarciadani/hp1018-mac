@@ -23,17 +23,36 @@ here: you download it from Microsoft.
 ## Option 2: Microsoft Update Catalog + script
 
 1. Open <https://www.catalog.update.microsoft.com> and search for `HP LaserJet 1018`.
-2. Download the Windows 10 version (x64 or x86, depending on your PC). It is a `.cab` file.
-3. Copy `install-hp1018.ps1` to the PC, open **PowerShell as Administrator** and run:
+2. Pick the entry **"Hewlett-Packard - Printers - HP LaserJet 1018"** dated **9/17/2012**
+   (4.4 MB), labelled *"Windows 8.1 and later drivers"*. **"and later" includes Windows 10 and
+   11**: there is no entry that says "Windows 10". One `.cab` holds both the 32- and 64-bit
+   versions. Click **Download** and then the `.cab` link that appears (it has a long name,
+   like `20522205_dd3e17….cab`).
+3. Download this project on the PC (**Code → Download ZIP** on GitHub) and unzip it. The
+   script is in the `windows` folder.
+4. Open **PowerShell as Administrator** (Start menu → type *PowerShell* → right-click →
+   *Run as administrator*), go to the `windows` folder and run **a single line**:
 
    ```powershell
-   Set-ExecutionPolicy -Scope Process Bypass
-   .\install-hp1018.ps1 -DriverPath "$env:USERPROFILE\Downloads\<file>.cab"
+   powershell -ExecutionPolicy Bypass -File .\install-hp1018.ps1 -DriverPath "C:\Users\YOUR_USER\Downloads\FILE_NAME.cab"
    ```
 
-   The script expands the `.cab`, installs the `.inf` with `pnputil`, creates the printer on
-   the USB port and prints a test page. If the driver already came from Windows Update, just
-   run `.\install-hp1018.ps1`.
+   Replace the path with your `.cab` (you can drag the file onto the PowerShell window to
+   type its path). This runs the script just this once, without changing Windows' security
+   settings.
+
+   The script expands the `.cab`, installs the driver with `pnputil`, creates the printer on
+   the USB port and prints a test page. If the driver already came from Windows Update, leave
+   out the `-DriverPath "..."` part.
+
+### Without the script
+
+1. Double-click the `.cab` (Windows shows it as a folder), select everything and copy it to a
+   new folder, for example `C:\HP1018`.
+2. **Control Panel → Devices and Printers → Add a printer → "The printer that I want isn't
+   listed" → Add a local printer → port `USB001`**.
+3. Click **Have Disk… → Browse**, choose `C:\HP1018\HPLJ1020.INF` (it covers the 1018, 1020
+   and 1022) and then the **HP LaserJet 1018** model.
 
 ## Common problems
 

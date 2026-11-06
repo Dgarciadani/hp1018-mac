@@ -1,14 +1,19 @@
-# Driver HP LaserJet 1018 para macOS (Apple Silicon e Intel)
+# HP LaserJet 1018 en macOS y Windows 10/11
 
 [English](README.md) · **Español**
 
-Driver libre para seguir usando la **HP LaserJet 1018** en macOS moderno, para el que HP ya
-no publica drivers. Es nativo (sin Rosetta ni Ghostscript) y se instala con unos pocos
-comandos. Para **Windows 10**, ver [windows/README-es.md](windows/README-es.md).
+Para seguir usando la **HP LaserJet 1018** en sistemas actuales, para los que HP ya no
+publica drivers:
+
+| Sistema | Solución | Guía |
+|---|---|---|
+| **macOS** (Apple Silicon e Intel) | Driver libre y nativo de este repositorio (sin Rosetta ni Ghostscript) | [más abajo](#instalación-paso-a-paso) |
+| **Windows 10 y 11** | Driver oficial de HP del Microsoft Update Catalog, con guía paso a paso y script de instalación | [windows/README-es.md](windows/README-es.md) |
 
 > **Estado: beta.** Probado con una 1018 real en macOS 27.2 (Mac con Apple Silicon),
-> conectada directo y a través de un dock USB-C. Si lo pruebas en otro Mac, cuéntanos cómo
-> te fue abriendo un *issue* con la plantilla "Reporte de prueba".
+> conectada directo y a través de un dock USB-C, y en **Windows 11** con el script de
+> instalación. Si lo pruebas en otro equipo, cuéntanos cómo te fue abriendo un *issue* con
+> la plantilla "Reporte de prueba".
 
 > Proyecto independiente, **no afiliado a HP**. HP y LaserJet son marcas de HP Inc.
 > Se entrega **sin ninguna garantía** (ver [LICENSE](LICENSE)).
@@ -147,7 +152,7 @@ make ARCHS="-arch arm64 -arch x86_64"       # binario universal (Apple Silicon +
 | `scripts/` | Firmware, instalación y desinstalación |
 | `test/` | Pruebas sin impresora y revisiones de seguridad |
 | `tools/zjsdecode.c` | Decodificador de foo2zjs, solo para pruebas |
-| `windows/` | Guía y script para Windows 10 |
+| `windows/` | Guía y script para Windows 10/11 |
 
 ## Licencia y créditos
 

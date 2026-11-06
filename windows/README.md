@@ -1,11 +1,12 @@
-# HP LaserJet 1018 on Windows 10
+# HP LaserJet 1018 on Windows 10 and 11
 
 **English** · [Español](README-es.md)
 
-> **Beta:** this guide and the script have not been tested on a real Windows 10 PC yet.
-> If you try them, please report the result by opening an issue.
+> **Tested on Windows 11** with a real HP LaserJet 1018, using option 2 (catalog driver +
+> script). The same driver package covers Windows 10. If you try it, please report the
+> result by opening an issue.
 
-Windows 10 does not need a new driver: HP publishes its own through **Windows Update** and
+Windows 10 and 11 do not need a new driver: HP publishes its own through **Windows Update** and
 the **Microsoft Update Catalog**. What usually fails is Windows not downloading it on its own.
 This guide covers both routes and a plan B. HP's driver is proprietary, so it is not included
 here: you download it from Microsoft.
@@ -15,6 +16,8 @@ here: you download it from Microsoft.
 1. Connect the printer by USB and switch it on.
 2. **Settings → Update & Security → Windows Update → Check for updates**. Also open
    *View optional updates → Driver updates* and tick the HP one if it appears.
+   On **Windows 11**: **Settings → Windows Update → Advanced options → Optional updates →
+   Driver updates**.
 3. If it does not: **Control Panel → Devices and Printers → Add a printer →
    "The printer that I want isn't listed" → Add a local printer → port `USB001`**. In the
    model list click **Windows Update** (takes a few minutes) and choose

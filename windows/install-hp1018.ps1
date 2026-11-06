@@ -2,11 +2,10 @@
 # Copyright (C) 2026 Gregorio Garcia
 <#
 .SYNOPSIS
-  Instala la HP LaserJet 1018 en Windows 10 con el driver oficial de HP.
+  Instala la HP LaserJet 1018 en Windows 10 y 11 con el driver oficial de HP.
 
 .DESCRIPTION
-  BETA: este script aun no se ha probado en un PC real con Windows 10.
-  BETA: this script has not been tested on a real Windows 10 PC yet.
+  Probado en Windows 11 con una LaserJet 1018 real (tested on Windows 11).
 
   1. Si el driver ya esta en el sistema (Windows Update), solo crea la impresora.
   2. Si no, usa el paquete descargado del Microsoft Update Catalog

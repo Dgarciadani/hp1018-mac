@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+- Windows: tested on **Windows 11** with a real HP LaserJet 1018 (catalog driver + script).
+- Windows guide points to the right Microsoft Update Catalog package ("Windows 8.1 and later
+  drivers", 2012-09-17, covers Windows 10 and 11) and runs the script with
+  `powershell -ExecutionPolicy Bypass -File ...`; adds a no-script "Have Disk" alternative
+  and the Windows 11 Windows Update path.
+- READMEs now present the repository as the solution for both macOS and Windows 10/11.
+
 ## v0.1.0-beta — 2026-11-05
 
 First public release. / Primera versión pública.

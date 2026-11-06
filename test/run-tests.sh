@@ -56,6 +56,8 @@ if [ -f $B/sihp1018.dl ]; then
 	echo "FALLA firmware no antepuesto"
 	fail=1
     fi
+else
+    echo "SALTA prueba de firmware: falta / skipped, missing $B/sihp1018.dl (sh scripts/get-firmware.sh)"
 fi
 
 exit $fail

@@ -651,7 +651,7 @@ send_firmware(FILE *fp)
     }
     fclose(fw);
 
-    fprintf(stderr, "INFO: Enviando firmware a la impresora...\n");
+    fprintf(stderr, "INFO: Enviando firmware / Sending firmware...\n");
     if (fwrite(data, 1, (size_t) size, fp) != (size_t) size)
     {
 	free(data);
@@ -667,7 +667,7 @@ send_firmware(FILE *fp)
      */
     len = 0;
     cupsSideChannelDoRequest(CUPS_SC_CMD_DRAIN_OUTPUT, buf, &len, 60.0);
-    fprintf(stderr, "INFO: Esperando a que la impresora inicie el firmware...\n");
+    fprintf(stderr, "INFO: Esperando a la impresora / Waiting for the printer...\n");
     for (i = 0; i < FW_BOOT_WAIT && !Canceled; ++i)
 	sleep(1);
 
@@ -676,7 +676,7 @@ send_firmware(FILE *fp)
 	state = firmware_loaded();
 	if (state == 1)
 	{
-	    fprintf(stderr, "INFO: Firmware cargado\n");
+	    fprintf(stderr, "INFO: Firmware cargado / Firmware loaded\n");
 	    return 0;
 	}
 	if (state < 0)

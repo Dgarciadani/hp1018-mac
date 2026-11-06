@@ -7,11 +7,11 @@
 #   make test       pruebas sin impresora
 #   make check      pruebas + revisiones de seguridad (analizador, sanitizers)
 #
-# Binario universal (Apple Silicon + Intel):
-#   make ARCHS="-arch arm64 -arch x86_64"
+# Por defecto genera un binario universal (Apple Silicon + Intel).
+# Solo una arquitectura:  make ARCHS="-arch arm64"
 
 CC	?= clang
-ARCHS	?= -arch arm64
+ARCHS	?= -arch arm64 -arch x86_64
 MINOS	?= -mmacosx-version-min=11.0
 CFLAGS	?= -O2
 CFLAGS	+= $(ARCHS) $(MINOS) -Wall -Wextra -Werror -Isrc/third_party

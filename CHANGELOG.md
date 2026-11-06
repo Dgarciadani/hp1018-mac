@@ -8,6 +8,13 @@
   `powershell -ExecutionPolicy Bypass -File ...`; adds a no-script "Have Disk" alternative
   and the Windows 11 Windows Update path.
 - READMEs now present the repository as the solution for both macOS and Windows 10/11.
+- macOS: the driver now builds as a universal binary (Apple Silicon + Intel) by default, and
+  `install.sh` refuses a binary built for another CPU.
+- Docs no longer assume where the project or the downloads are: macOS uses drag-and-drop into
+  Terminal plus an `ls Makefile` check (and `git clone` as an alternative); Windows copies the
+  file paths with "Copy as path", since an Administrator PowerShell does not accept dragged
+  files. Plan B uses `sudo` and shows how to find the Mac's network name.
+- Windows script and filter status messages are now bilingual (Spanish / English).
 
 ## v0.1.0-beta — 2026-11-05
 

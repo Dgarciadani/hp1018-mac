@@ -46,14 +46,32 @@ xcode-select --install
 Acepta la ventana que aparece y espera a que termine. Si dice que ya están instaladas, sigue.
 
 **2. Descarga este proyecto.** En la página de GitHub del proyecto: botón verde **Code →
-Download ZIP**. Descomprime el ZIP (por ejemplo en tu carpeta Descargas). En Terminal, entra
-a la carpeta; escribe `cd ` (con espacio) y arrastra la carpeta a la ventana de Terminal:
+Download ZIP**. Safari lo descomprime solo; si no, haz doble clic en el ZIP. La carpeta puede
+quedar donde quieras.
+
+En Terminal, escribe `cd` seguido de un espacio (sin pulsar Enter todavía), **arrastra la
+carpeta del proyecto** desde el Finder a la ventana de Terminal y pulsa Enter. Terminal
+escribe la ruta por ti, sea cual sea. Por ejemplo, si quedó en Descargas se verá así:
 
 ```bash
 cd ~/Downloads/hp1018-mac-main
 ```
 
-(El nombre exacto de la carpeta puede variar.)
+Comprueba que estás en la carpeta correcta:
+
+```bash
+ls Makefile
+```
+
+Debe responder `Makefile`. Si dice `No such file or directory`, arrastraste otra carpeta:
+repite el `cd` con la carpeta que contiene el archivo `Makefile`.
+
+Si usas git, en lugar de descargar el ZIP puedes hacer:
+
+```bash
+git clone https://github.com/Dgarciadani/hp1018-mac.git
+cd hp1018-mac
+```
 
 **3. Compila el driver:**
 
@@ -117,7 +135,7 @@ Borra el driver, el firmware instalado y la cola de impresión.
 | Gira los rodillos pero no toma papel, y la cola queda "enviando datos" | Apaga la impresora 10 s y enciéndela. No consultes la impresora (por ejemplo con `lpinfo -l -v`) mientras arranca el firmware: eso la cuelga. |
 | La primera página tarda | Normal: es la carga del firmware tras encenderla. |
 | `install.sh` dice que no encontró la 1018 | Conéctala y enciéndela, espera unos segundos y vuelve a ejecutarlo. |
-| `get-firmware.sh` no puede descargar el plugin | Revisa tu conexión. Si el archivo ya no existe en OpenPrinting, descarga `hplip-3.24.4-plugin.run` por tu cuenta y pásalo: `sh scripts/get-firmware.sh ruta/al/archivo.run` (se verifica igual). |
+| `get-firmware.sh` no puede descargar el plugin | Revisa tu conexión. Si el archivo ya no existe en OpenPrinting, descarga `hplip-3.24.4-plugin.run` por tu cuenta, escribe `sh scripts/get-firmware.sh ` y arrastra ese archivo a la ventana de Terminal (se verifica igual). |
 
 Para ver qué pasa en detalle:
 
@@ -141,7 +159,7 @@ Luego mira `/var/log/cups/error_log`, y al terminar ejecuta `sudo cupsctl --no-d
 
 ```bash
 make check                                  # pruebas + revisiones de seguridad
-make ARCHS="-arch arm64 -arch x86_64"       # binario universal (Apple Silicon + Intel)
+make ARCHS="-arch arm64"                    # una sola arquitectura (por defecto: universal)
 ```
 
 | Ruta | Contenido |

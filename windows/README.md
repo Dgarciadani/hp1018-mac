@@ -19,7 +19,7 @@ here: you download it from Microsoft.
    On **Windows 11**: **Settings → Windows Update → Advanced options → Optional updates →
    Driver updates**.
 3. If it does not: **Control Panel → Devices and Printers → Add a printer →
-   "The printer that I want isn't listed" → Add a local printer → port `USB001`**. In the
+   "The printer that I want isn't listed" → Add a local printer → port `USB001`** (or whichever USB port is listed). In the
    model list click **Windows Update** (takes a few minutes) and choose
    **HP → HP LaserJet 1018**.
 
@@ -31,30 +31,44 @@ here: you download it from Microsoft.
    11**: there is no entry that says "Windows 10". One `.cab` holds both the 32- and 64-bit
    versions. Click **Download** and then the `.cab` link that appears (it has a long name,
    like `20522205_dd3e17….cab`).
-3. Download this project on the PC (**Code → Download ZIP** on GitHub) and unzip it. The
-   script is in the `windows` folder.
+3. Download this project on the PC (**Code → Download ZIP** on GitHub) and unzip it
+   (right-click → *Extract All*) wherever you like. The script `install-hp1018.ps1` is in the
+   `windows` folder. Note: *Extract All* sometimes creates a folder inside another one with the
+   same name; that is fine, just look for the `windows` folder.
 4. Open **PowerShell as Administrator** (Start menu → type *PowerShell* → right-click →
-   *Run as administrator*), go to the `windows` folder and run **a single line**:
+   *Run as administrator*). Type this, with a space at the end, **without pressing Enter**:
 
    ```powershell
-   powershell -ExecutionPolicy Bypass -File .\install-hp1018.ps1 -DriverPath "C:\Users\YOUR_USER\Downloads\FILE_NAME.cab"
+   powershell -ExecutionPolicy Bypass -File 
    ```
 
-   Replace the path with your `.cab` (you can drag the file onto the PowerShell window to
-   type its path). This runs the script just this once, without changing Windows' security
-   settings.
+5. Complete the line with the paths of your files. An Administrator window does not accept
+   dragged files, so copy them from the File Explorer:
+   - In the Explorer, right-click `install-hp1018.ps1` → **Copy as path** (on Windows 10:
+     hold **Shift** while right-clicking). Go back to PowerShell and paste
+     with **Ctrl+V** (or a right-click).
+   - Type ` -DriverPath ` (with spaces on both sides).
+   - Copy the path of the `.cab` you downloaded the same way and paste it.
+
+   The full line looks similar to this one (your paths will differ); then press Enter:
+
+   ```powershell
+   powershell -ExecutionPolicy Bypass -File "C:\...\windows\install-hp1018.ps1" -DriverPath "C:\...\20522205_dd3e17....cab"
+   ```
+
+   This runs the script just this once, without changing Windows' security settings.
 
    The script expands the `.cab`, installs the driver with `pnputil`, creates the printer on
-   the USB port and prints a test page. If the driver already came from Windows Update, leave
-   out the `-DriverPath "..."` part.
+   the USB port and prints a test page. If the driver already came from Windows Update, the
+   `-DriverPath "..."` part is not needed.
 
 ### Without the script
 
 1. Double-click the `.cab` (Windows shows it as a folder), select everything and copy it to a
    new folder, for example `C:\HP1018`.
 2. **Control Panel → Devices and Printers → Add a printer → "The printer that I want isn't
-   listed" → Add a local printer → port `USB001`**.
-3. Click **Have Disk… → Browse**, choose `C:\HP1018\HPLJ1020.INF` (it covers the 1018, 1020
+   listed" → Add a local printer → port `USB001`** (or whichever USB port is listed).
+3. Click **Have Disk… → Browse**, open that folder and choose `HPLJ1020.INF` (it covers the 1018, 1020
    and 1022) and then the **HP LaserJet 1018** model.
 
 ## Common problems
@@ -63,7 +77,7 @@ here: you download it from Microsoft.
 |---|---|
 | Queue shows "Error" or nothing comes out | Switch the printer off for 10 s and on again: the driver resends the firmware when it detects it. |
 | Installed as "Unknown device" or with no queue | Unplug USB, remove the device in Device Manager, plug it back in and run the script. |
-| Stuck jobs | `net stop spooler`, delete `C:\Windows\System32\spool\PRINTERS\*`, `net start spooler`. |
+| Stuck jobs | In PowerShell as Administrator: `Stop-Service Spooler`, then `Remove-Item "$env:SystemRoot\System32\spool\PRINTERS\*"` and `Start-Service Spooler`. |
 | Stopped printing after a big Windows update | Remove the printer and its driver (*Print server properties → Drivers*) and repeat option 1 or 2. |
 | Using a USB hub | Try connecting it directly to the PC. |
 
@@ -74,12 +88,16 @@ If the printer lives on a Mac with the `rastertozjs` driver, you can share it:
 1. On the Mac:
 
    ```bash
-   lpadmin -p HP_LaserJet_1018 -o printer-is-shared=true
-   cupsctl --share-printers
+   sudo lpadmin -p HP_LaserJet_1018 -o printer-is-shared=true
+   sudo cupsctl --share-printers
+   scutil --get LocalHostName
    ```
 
+   `HP_LaserJet_1018` is the queue name `install.sh` creates (`lpstat -p` shows yours). The
+   last command prints the Mac's network name.
+
 2. On Windows: **Add a printer → Select a shared printer by name** →
-   `http://<mac-name>.local:631/printers/HP_LaserJet_1018`
+   `http://<mac-name>.local:631/printers/HP_LaserJet_1018`, using the name `scutil` printed.
 3. As driver, choose **Microsoft → Microsoft IPP Class Driver**.
 
 Important limit: macOS no longer converts PostScript, so the Mac only accepts jobs as **PDF or

@@ -34,6 +34,8 @@ done
     || fail "build/sihp1018.dl no es el firmware verificado / is not the verified firmware"
 file "$ROOT/build/rastertozjs" | grep -q "Mach-O" \
     || fail "build/rastertozjs no es un ejecutable de macOS / is not a macOS executable"
+lipo "$ROOT/build/rastertozjs" -verify_arch "$(uname -m)" \
+    || fail "build/rastertozjs no sirve para este Mac ($(uname -m)) / was built for another CPU. Ejecuta / run: make clean all ppd"
 gzip -t "$ROOT/build/HP-LaserJet-1018.ppd.gz" \
     || fail "build/HP-LaserJet-1018.ppd.gz esta danado / is damaged"
 
@@ -59,4 +61,4 @@ lpadmin -p "$QUEUE" -E -v "$URI" -P "$PPD_DIR/$PPD_NAME" \
 cupsenable "$QUEUE"
 cupsaccept "$QUEUE"
 
-echo "Listo / done. Prueba / test:  lp -d $QUEUE archivo.pdf"
+echo "Listo / done. Prueba / test:  lp -d $QUEUE <archivo.pdf / file.pdf>"

@@ -3,28 +3,35 @@
 <#
 .SYNOPSIS
   Instala la HP LaserJet 1018 en Windows 10 y 11 con el driver oficial de HP.
+  Installs the HP LaserJet 1018 on Windows 10 and 11 with HP's official driver.
 
 .DESCRIPTION
   Probado en Windows 11 con una LaserJet 1018 real (tested on Windows 11).
 
   1. Si el driver ya esta en el sistema (Windows Update), solo crea la impresora.
-  2. Si no, usa el paquete descargado del Microsoft Update Catalog
-     (archivo .cab o carpeta ya descomprimida) indicado con -DriverPath.
+     If the driver is already installed (Windows Update), it only adds the printer.
+  2. Si no, usa el paquete del Microsoft Update Catalog indicado con -DriverPath
+     (archivo .cab o carpeta ya descomprimida).
+     Otherwise it uses the Microsoft Update Catalog package given with -DriverPath
+     (.cab file or an already expanded folder).
 
-  Ejecutar en PowerShell como Administrador, con la impresora conectada
-  por USB y encendida:
+  Ejecutar en PowerShell como Administrador, con la impresora conectada por USB y
+  encendida. Run it in PowerShell as Administrator, printer on and connected by USB.
+  Usa las rutas completas de tus archivos / use the full paths of your files:
 
-    powershell -ExecutionPolicy Bypass -File .\install-hp1018.ps1
-    powershell -ExecutionPolicy Bypass -File .\install-hp1018.ps1 -DriverPath "C:\ruta\al\archivo.cab"
+    powershell -ExecutionPolicy Bypass -File "<...>\windows\install-hp1018.ps1"
+    powershell -ExecutionPolicy Bypass -File "<...>\windows\install-hp1018.ps1" -DriverPath "<...>\<file>.cab"
 
-  En el catalogo, el paquete correcto es "Hewlett-Packard - Printers - HP LaserJet 1018"
-  del 17/9/2012, "Windows 8.1 and later drivers" (sirve para Windows 10 y 11).
+  En el catalogo, el paquete correcto es / the right catalog package is
+  "Hewlett-Packard - Printers - HP LaserJet 1018", 2012-09-17,
+  "Windows 8.1 and later drivers" (Windows 10 y 11 / Windows 10 and 11).
 
 .PARAMETER DriverPath
   Archivo .cab o carpeta con el driver del Microsoft Update Catalog.
+  .cab file or folder with the Microsoft Update Catalog driver.
 
 .PARAMETER PrinterName
-  Nombre de la impresora en Windows (por defecto "HP LaserJet 1018").
+  Nombre de la impresora en Windows / printer name (default "HP LaserJet 1018").
 #>
 param(
     [string]$DriverPath,
@@ -36,7 +43,7 @@ $ErrorActionPreference = "Stop"
 $principal = New-Object Security.Principal.WindowsPrincipal(
     [Security.Principal.WindowsIdentity]::GetCurrent())
 if (-not $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-    Write-Error "Abre PowerShell como Administrador y vuelve a ejecutar el script."
+    Write-Error "Abre PowerShell como Administrador y vuelve a ejecutarlo. / Open PowerShell as Administrator and run it again."
 }
 
 function Find-Driver {
@@ -46,7 +53,7 @@ function Find-Driver {
 }
 
 # 1. Que Windows detecte el USB y busque el driver por su cuenta
-Write-Host "Buscando la impresora en los puertos USB..."
+Write-Host "Buscando la impresora en USB... / Looking for the printer on USB..."
 pnputil /scan-devices | Out-Null
 Start-Sleep -Seconds 5
 
@@ -56,12 +63,13 @@ $driver = Find-Driver
 if (-not $driver) {
     if (-not $DriverPath) {
         Write-Host ""
-        Write-Host "El driver no esta instalado. Descargalo asi:"
-        Write-Host "  1. Abre https://www.catalog.update.microsoft.com"
-        Write-Host "  2. Busca: HP LaserJet 1018"
-        Write-Host "  3. Descarga 'Hewlett-Packard - Printers - HP LaserJet 1018' del 17/9/2012"
-        Write-Host "     ('Windows 8.1 and later drivers': sirve para Windows 10 y 11)"
-        Write-Host "  4. Ejecuta: powershell -ExecutionPolicy Bypass -File .\install-hp1018.ps1 -DriverPath <ruta al .cab>"
+        Write-Host "El driver no esta instalado. / The driver is not installed."
+        Write-Host "  1. https://www.catalog.update.microsoft.com"
+        Write-Host "  2. Busca / search: HP LaserJet 1018"
+        Write-Host "  3. Descarga / download 'Hewlett-Packard - Printers - HP LaserJet 1018', 2012-09-17"
+        Write-Host "     ('Windows 8.1 and later drivers' = Windows 10 / 11)"
+        Write-Host "  4. Ejecuta / run (cambia <...> por la ruta del .cab / replace <...> with the .cab path):"
+        Write-Host "     powershell -ExecutionPolicy Bypass -File `"$PSCommandPath`" -DriverPath `"<...>.cab`""
         exit 1
     }
 
@@ -72,17 +80,17 @@ if (-not $driver) {
         $dir = Join-Path $env:TEMP "hp1018-driver"
         Remove-Item $dir -Recurse -Force -ErrorAction SilentlyContinue
         New-Item -ItemType Directory $dir | Out-Null
-        Write-Host "Descomprimiendo $src ..."
+        Write-Host "Descomprimiendo / expanding $src ..."
         expand.exe -F:* "$src" "$dir" | Out-Null
     }
 
     $infs = Get-ChildItem $dir -Recurse -Filter *.inf |
         Where-Object { Select-String -Path $_.FullName -Pattern "1018" -Quiet }
     if (-not $infs) {
-        Write-Error "No se encontro ningun .inf para la 1018 en $dir"
+        Write-Error "No hay un .inf para la 1018 en / no .inf for the 1018 in $dir"
     }
     foreach ($inf in $infs) {
-        Write-Host "Agregando driver $($inf.Name) ..."
+        Write-Host "Agregando driver / adding driver $($inf.Name) ..."
         pnputil /add-driver "$($inf.FullName)" /install
     }
 
@@ -94,12 +102,12 @@ if (-not $driver) {
             Add-PrinterDriver -Name $n
             break
         } catch {
-            Write-Host "No se pudo registrar '$n': $($_.Exception.Message)"
+            Write-Host "No se pudo registrar / could not register '$n': $($_.Exception.Message)"
         }
     }
     $driver = Find-Driver
     if (-not $driver) {
-        Write-Error "El driver no quedo registrado. Revisa la guia (README-es.md)."
+        Write-Error "El driver no quedo registrado / the driver was not registered. Ver / see README.md, README-es.md"
     }
 }
 Write-Host "Driver: $($driver.Name)"
@@ -108,20 +116,20 @@ Write-Host "Driver: $($driver.Name)"
 $existing = Get-Printer -ErrorAction SilentlyContinue |
     Where-Object { $_.DriverName -eq $driver.Name }
 if ($existing) {
-    Write-Host "Ya existe la impresora '$($existing[0].Name)' con este driver."
+    Write-Host "Ya existe / already exists: '$($existing[0].Name)'"
     $PrinterName = $existing[0].Name
 } else {
     $port = Get-PrinterPort | Where-Object { $_.Name -like "USB*" } |
         Select-Object -First 1
     if (-not $port) {
-        Write-Error "No hay puerto USB de impresora. Conecta y enciende la 1018."
+        Write-Error "No hay puerto USB de impresora / no USB printer port. Conecta y enciende la 1018 / connect and power on the 1018."
     }
     Add-Printer -Name $PrinterName -DriverName $driver.Name -PortName $port.Name
-    Write-Host "Impresora '$PrinterName' creada en $($port.Name)"
+    Write-Host "Impresora creada / printer added: '$PrinterName' ($($port.Name))"
 }
 
 # 4. Pagina de prueba
 $wmiName = $PrinterName.Replace("\", "\\").Replace("'", "\'")
 $p = Get-CimInstance Win32_Printer -Filter "Name='$wmiName'"
 Invoke-CimMethod -InputObject $p -MethodName PrintTestPage | Out-Null
-Write-Host "Pagina de prueba enviada."
+Write-Host "Pagina de prueba enviada / test page sent."
